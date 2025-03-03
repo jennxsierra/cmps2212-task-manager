@@ -24,6 +24,11 @@ app.use((req, res, next) => {
 // Mount the task management routes
 app.use("/", tasksRouter);
 
+// 404 Error handler
+app.use((req, res) => {
+  res.status(404).render("error", { message: "Page Not Found" });
+});
+
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
