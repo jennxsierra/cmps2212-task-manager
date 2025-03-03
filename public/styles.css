@@ -1,0 +1,96 @@
+/* Filename: public/styles.css */
+/* Overall body style */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 20px;
+}
+
+/* Headings */
+h1,
+h2 {
+  text-align: center;
+}
+
+/* The form for adding tasks */
+form {
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+form input[type="text"],
+form textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+form button {
+  display: block;
+  margin: 10px auto 0 auto;
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #45a049;
+}
+
+/* Task list styling */
+ul {
+  list-style-type: none;
+  padding: 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+ul li {
+  background-color: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  /* Use flex to separate the task details from the action buttons */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* The text portion of the task */
+.task-details {
+  flex: 1;
+}
+
+/* The buttons portion of the task */
+.task-actions form {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.task-actions button {
+  padding: 6px 12px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.task-actions button:hover {
+  background-color: #45a049;
+}

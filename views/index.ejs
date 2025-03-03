@@ -1,0 +1,54 @@
+<!-- Filename: views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <h1>Task Manager</h1>
+
+    <h2>Add New Task</h2>
+    <form action="/add-task" method="POST">
+      <label for="title">Title:</label>
+      <input type="text" name="title" id="title" required />
+
+      <label for="description">Description (optional):</label>
+      <textarea name="description" id="description"></textarea>
+
+      <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Task List</h2>
+    <ul>
+      <% if (tasks.length === 0) { %>
+      <li>No tasks available.</li>
+      <% } else { %> <% tasks.forEach(task => { %>
+      <li>
+        <!-- Task text section -->
+        <div class="task-details" <% if (task.completed) { %>
+          style="text-decoration: line-through;" <% } %> >
+          <strong><%= task.title %></strong>
+          <% if (task.description) { %> - <%= task.description %> <% } %>
+        </div>
+
+        <!-- Task actions section -->
+        <div class="task-actions">
+          <!-- Form to toggle completion -->
+          <form action="/toggle-task/<%= task.id %>" method="POST">
+            <button type="submit">
+              <%= task.completed ? 'Mark Incomplete' : 'Mark Complete' %>
+            </button>
+          </form>
+          <!-- Form to delete task -->
+          <form action="/delete-task/<%= task.id %>" method="POST">
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+      </li>
+      <% }); %> <% } %>
+    </ul>
+  </body>
+</html>
