@@ -1,52 +1,80 @@
-<!-- Filename: views/index.ejs -->
-<%- include('partials/header', { pageTitle: 'Home - Task Manager' }) %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadata & Stylesheet -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Main Page Container -->
+    <div class="page-container">
+      <!-- Application Window -->
+      <div class="app-window">
+        <!-- Window Title Bar -->
+        <div class="window-titlebar">
+          <span class="window-title">Task Manager</span>
+          <div class="window-controls">
+            <button class="window-btn minimize" title="Minimize">_</button>
+            <button class="window-btn maximize" title="Maximize">☐</button>
+            <button class="window-btn close" title="Close">X</button>
+          </div>
+        </div>
+        <!-- Window Content Area -->
+        <div class="window-content">
+          <!-- Add New Task Section -->
+          <section class="task-section">
+            <h2>Add New Task</h2>
+            <form action="/add-task" method="POST" class="task-form">
+              <label for="title">Title:</label>
+              <input type="text" name="title" id="title" required />
 
-<section class="task-section">
-  <h2>Add New Task</h2>
-  <form action="/add-task" method="POST" class="task-form">
-    <label for="title">Title:</label>
-    <input type="text" name="title" id="title" required />
+              <label for="description">Description [optional]:</label>
+              <textarea name="description" id="description"></textarea>
 
-    <label for="description">Description (optional):</label>
-    <textarea name="description" id="description"></textarea>
+              <button type="submit">Add Task</button>
+            </form>
+          </section>
 
-    <button type="submit">Add Task</button>
-  </form>
-</section>
-
-<section class="task-list-section">
-  <h2>Task List</h2>
-  <% if (tasks.length === 0) { %>
-  <p>No tasks available.</p>
-  <% } else { %>
-  <ul class="task-list">
-    <% tasks.forEach(task => { %>
-    <li class="task-item">
-      <div class="task-details <%= task.completed ? 'completed' : '' %>">
-        <strong><%= task.title %></strong>
-        <% if (task.description) { %>
-        <p><%= task.description %></p>
-        <% } %>
+          <!-- Task List Section -->
+          <section class="task-list-section">
+            <h2>Task List</h2>
+            <% if (tasks.length === 0) { %>
+            <p>No tasks available.</p>
+            <% } else { %>
+            <ul class="task-list">
+              <% tasks.forEach(task => { %>
+              <li class="task-item <%= task.completed ? 'completed' : '' %>">
+                <!-- Task Details -->
+                <div class="task-details">
+                  <strong><%= task.title %></strong>
+                  <% if (task.description) { %>
+                  <p><%= task.description %></p>
+                  <% } %>
+                </div>
+                <!-- Task Action Buttons -->
+                <div class="task-actions">
+                  <form action="/toggle-task/<%= task.id %>" method="POST">
+                    <button type="submit" class="complete-button">
+                      <%= task.completed ? 'Reopen' : 'Complete' %>
+                    </button>
+                  </form>
+                  <form action="/delete-task/<%= task.id %>" method="POST">
+                    <button type="submit" class="delete-button">Delete</button>
+                  </form>
+                </div>
+              </li>
+              <% }); %>
+            </ul>
+            <% } %>
+          </section>
+        </div>
       </div>
-      <div class="task-actions">
-        <!-- Complete form -->
-        <form action="/toggle-task/<%= task.id %>" method="POST">
-          <button
-            type="submit"
-            class="<%= task.completed ? 'gray-button' : 'green-button' %>"
-          >
-            <%= task.completed ? 'Reopen' : 'Complete' %>
-          </button>
-        </form>
-        <!-- Delete form -->
-        <form action="/delete-task/<%= task.id %>" method="POST">
-          <button type="submit" class="delete-button">Delete</button>
-        </form>
-      </div>
-    </li>
-    <% }); %>
-  </ul>
-  <% } %>
-</section>
-
-<%- include('partials/footer') %>
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; Jennessa Sierra | CMPS2212</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,9 +1,39 @@
-<!-- Filename: views/error.ejs -->
-<%- include('partials/header', { pageTitle: 'Error - Task Manager' }) %>
-
-<section class="error-section">
-  <h2>404 Error</h2>
-  <p><%= message %></p>
-</section>
-
-<%- include('partials/footer') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadata & Stylesheet -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error - Task Manager</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Main Page Container -->
+    <div class="page-container">
+      <!-- Application Window -->
+      <div class="app-window">
+        <!-- Title Bar -->
+        <div class="window-titlebar">
+          <span class="window-title">Error</span>
+          <!-- Window Control Buttons -->
+          <div class="window-controls">
+            <button class="window-btn minimize" title="Minimize">_</button>
+            <button class="window-btn maximize" title="Maximize">☐</button>
+            <button class="window-btn close" title="Close">X</button>
+          </div>
+        </div>
+        <!-- Window Content -->
+        <div class="window-content">
+          <section class="error-section" style="text-align: center">
+            <h2>404 Error</h2>
+            <p><%= message %></p>
+          </section>
+        </div>
+      </div>
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; Jennessa Sierra | CMPS2212</p>
+      </footer>
+    </div>
+  </body>
+</html>

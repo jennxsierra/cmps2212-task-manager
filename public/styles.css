@@ -1,223 +1,253 @@
-/* Filename: public/styles.css */
+/* Import IBM Plex Mono */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap");
 
-/* General reset or base styles (optional) */
+/* ----------------------- Global Reset & Base Styles ----------------------- */
+* {
+  box-sizing: border-box;
+  font-family: "IBM Plex Mono", monospace;
+}
+
 html,
 body {
-  height: 100%;
   margin: 0;
   padding: 0;
+  background-color: #adadad;
 }
 
-/* Body */
-body {
+/* Flex container to allow the footer to stick to the bottom */
+.page-container {
   display: flex;
   flex-direction: column;
-  font-family: Inter, Arial, sans-serif;
-  background-color: #f2f2f2;
+  min-height: 100vh;
 }
 
-/* Main */
-.main-container {
-  flex: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
+/* ----------------------- App Window ----------------------- */
+.app-window {
+  width: 90%;
+  max-width: 800px;
+  flex: 1 0 auto;
+  background-color: #f0f0f0;
+  margin: 2rem auto;
+  border: 2px solid #999999;
+  box-shadow: 10px 10px 0px 0px #0000cded;
 }
 
-/* Heading */
-h2 {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-/* Navbar */
-.navbar {
+/* ----------------------- Title Bar & Window Controls ----------------------- */
+.window-titlebar {
+  background: linear-gradient(to bottom, #000080, #0000cd);
+  color: #fff;
+  padding: 4px 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #333;
-  padding: 0.5rem;
-}
-
-.nav-brand .brand-link {
-  color: #fff;
-  text-decoration: none;
-  font-size: 1.8rem;
   font-weight: bold;
+  border-bottom: 2px solid #999999;
 }
 
-.nav-links ul {
-  list-style: none;
+.window-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.window-controls {
   display: flex;
+  gap: 4px;
 }
 
-.nav-links li {
-  margin-left: 1rem;
-}
-
-.nav-links a {
-  color: #fff;
-  text-decoration: none;
-  padding: 0.5rem;
-  border-radius: 6px;
-}
-
-.nav-links a:hover {
-  background-color: #444;
-}
-
-/* Main container */
-.main-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* Task section */
-.task-section,
-.task-list-section {
-  width: 600px;
-  background-color: #fff;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  border-radius: 6px;
-}
-
-.task-section h2,
-.task-list-section h2 {
-  margin-bottom: 1rem;
-}
-
-/* Form styling */
-.task-form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.task-form label {
-  display: block;
-  margin: 0.5rem 0 0.25rem;
+.window-btn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #c0c0c0;
+  background-color: #e0e0e0;
+  color: #000;
   font-weight: bold;
-}
-
-.task-form input[type="text"],
-.task-form textarea {
-  font-family: Inter, Arial, sans-serif;
-  width: 95%;
-  max-width: 98%;
-  padding: 0.5rem;
-  margin-bottom: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.task-form button {
-  align-self: center;
-  font-weight: bold;
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
   cursor: pointer;
 }
 
-.task-form button:hover {
-  background-color: #45a049;
+.window-btn:hover {
+  background-color: #d0d0d0;
 }
 
-/* Task list */
+/* ----------------------- Window Content ----------------------- */
+.window-content {
+  padding: 1rem;
+}
+
+.window-content h2 {
+  text-align: center;
+  font-size: 1.4rem;
+  margin: 1rem 0;
+}
+
+/* ----------------------- Task Form Styling ----------------------- */
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #fff;
+  padding: 1rem;
+  border: 1px solid #c0c0c0;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+/* Hover effect for task-form */
+.task-form:hover {
+  transform: translate(-5px, -8px);
+  box-shadow: 5px 5px 0px 0px #000080;
+}
+
+.task-form label {
+  font-weight: bold;
+}
+
+/* Styling for input fields and textarea */
+.task-form input[type="text"],
+.task-form textarea {
+  width: 100%;
+  padding: 4px;
+  margin-bottom: 10px;
+  border: 1px solid #c0c0c0;
+  background-color: #f8f8f8;
+  color: #000;
+}
+
+.task-form textarea {
+  min-width: 90%;
+  max-width: 100%;
+  min-height: 50px;
+  max-height: 175px;
+}
+
+.task-form input[type="text"]:focus,
+.task-form textarea:focus {
+  border-color: #000080;
+  outline: none;
+}
+
+/* ----------------------- Task Details & List ----------------------- */
+.task-details {
+  min-width: 545px;
+}
+
+.task-details p {
+  margin: 16px;
+}
+
+/* Task List container with counter for numbering tasks */
 .task-list {
   list-style: none;
   padding: 0;
+  margin: 0;
   counter-reset: task-counter;
 }
 
+/* Individual Task Item Styling */
 .task-item {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background-color: #fafafa;
-  border: 1px solid #ccc;
-  margin-bottom: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 6px;
+  min-height: 100px;
+  background-color: #fff;
+  border: 1px solid #c0c0c0;
+  padding: 10px;
+  margin-bottom: 4px;
   counter-increment: task-counter;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
 }
 
+/* Hover effect for task items */
+.task-item:hover {
+  transform: translate(-5px, -8px);
+  box-shadow: 5px 5px 0px 0px #000080;
+}
+
+/* Display task number before each task item */
 .task-item::before {
   content: counter(task-counter) ".";
   font-weight: bold;
-  margin-right: 0.5rem;
-  color: #333;
+  margin-right: 10px;
 }
 
-.task-item p {
-  margin: 10px 30px 10px 10px;
+.task-item:hover {
+  background-color: #f0f0f0;
 }
 
-.task-details {
-  flex: 1;
+/* Style for completed tasks */
+.task-item.completed .task-details {
+  opacity: 0.6;
+  filter: grayscale(70%);
+  text-decoration: line-through;
+  color: #808080;
 }
 
-/* Task actions (the toggle and delete buttons) */
+/* Action buttons remain unaffected */
+.task-item.completed .task-actions {
+  opacity: 1;
+  filter: none;
+}
+
+/* Disable the hover effect for completed tasks */
+.task-item.completed:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: #fff;
+}
+
+/* ----------------------- Task Action Buttons ----------------------- */
+/* Container for aligning action buttons in a row */
 .task-actions {
   display: flex;
   flex-direction: row;
+  gap: 0.5rem;
 }
 
+/* Remove extra margins from forms within task-actions */
 .task-actions form {
   display: inline-block;
-  margin-left: 0.5rem;
+  margin: 0;
+  padding: 0;
 }
 
-.completed {
-  text-decoration: line-through;
-  color: #888;
-}
-
+/* General button styles for forms and task actions */
+.task-form button,
 .task-actions button {
-  font-weight: bold;
-  color: #fff;
-  border: none;
-  padding: 5px 0px;
-  border-radius: 6px;
+  padding: 4px 8px;
+  border: 1px solid #c0c0c0;
+  background-color: #e0e0e0;
+  color: #000;
   cursor: pointer;
-  width: 75px;
-  text-align: center;
 }
 
-.green-button {
-  background-color: #4caf50;
-}
-
-.green-button:hover {
-  background-color: #45a049;
-}
-
-.gray-button {
-  background-color: gray;
-}
-
-.gray-button:hover {
-  background-color: darkgray;
-}
-
+/* Specific fixed width for complete and delete buttons */
+.complete-button,
 .delete-button {
-  background-color: #f44336;
+  width: 80px;
 }
 
-.delete-button:hover {
-  background-color: #e53935;
+.task-form button:hover,
+.task-actions button:hover {
+  background-color: #d0d0d0;
 }
 
-/* Footer */
+/* ----------------------- Footer Styling ----------------------- */
 .footer {
-  background-color: #333;
-  color: #fff;
+  flex-shrink: 0;
   text-align: center;
-  padding: 0.5rem;
+  background-color: #1c1c1c;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-top: 1px solid #333;
+}
+
+.footer p {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  color: #ccc;
 }
