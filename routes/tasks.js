@@ -8,7 +8,18 @@ let nextId = 1;
 
 // GET / - Render the main page with the list of tasks and add task form
 router.get("/", (req, res) => {
-  res.render("index", { tasks });
+  let filteredTasks = tasks;
+  // Check if a search query exists in the URL
+  if (req.query.q) {
+    const q = req.query.q.toLowerCase();
+    filteredTasks = tasks.filter(
+      (task) =>
+        task.title.toLowerCase().includes(q) ||
+        (task.description && task.description.toLowerCase().includes(q))
+    );
+  }
+  // Pass the current query back to the view (to keep the search term in the input)
+  res.render("index", { tasks: filteredTasks, q: req.query.q || "" });
 });
 
 // POST /add-task - Add a new task

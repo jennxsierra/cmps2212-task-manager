@@ -39,21 +39,31 @@
 
           <!-- Task List Section -->
           <section class="task-list-section">
-            <h2>Task List</h2>
+            <div class="task-list-header">
+              <h2>Task List</h2>
+            </div>
+            <!-- Search form using GET so that the query appears in the URL -->
+            <form action="/" method="GET" class="search-form">
+              <input
+                type="text"
+                name="q"
+                placeholder="Search tasks..."
+                value="<%= q %>"
+              />
+              <button type="submit">Search</button>
+            </form>
             <% if (tasks.length === 0) { %>
             <p>No tasks available.</p>
             <% } else { %>
             <ul class="task-list">
               <% tasks.forEach(task => { %>
               <li class="task-item <%= task.completed ? 'completed' : '' %>">
-                <!-- Task Details -->
                 <div class="task-details">
                   <strong><%= task.title %></strong>
                   <% if (task.description) { %>
                   <p><%= task.description %></p>
                   <% } %>
                 </div>
-                <!-- Task Action Buttons -->
                 <div class="task-actions">
                   <form action="/toggle-task/<%= task.id %>" method="POST">
                     <button type="submit" class="complete-button">
