@@ -1,3 +1,4 @@
+<!-- Filename: views/index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,16 +43,43 @@
             <div class="task-list-header">
               <h2>Task List</h2>
             </div>
-            <!-- Search form using GET so that the query appears in the URL -->
-            <form action="/" method="GET" class="search-form">
-              <input
-                type="text"
-                name="q"
-                placeholder="Search tasks..."
-                value="<%= q %>"
-              />
-              <button type="submit">Search</button>
-            </form>
+            <!-- Search & Filter Forms -->
+            <div class="search-filter-container">
+              <!-- Filter Form -->
+              <form action="/" method="GET" class="filter-form">
+                <!-- Preserve the current search query -->
+                <input type="hidden" name="q" value="<%= q %>" />
+                <div class="filter-buttons">
+                  <label>
+                    <input type="radio" name="filter" value="all" <%= filter ===
+                    'all' ? 'checked' : '' %> /> All
+                  </label>
+                  <label>
+                    <input type="radio" name="filter" value="completed" <%=
+                    filter === 'completed' ? 'checked' : '' %> /> Completed
+                  </label>
+                  <label>
+                    <input type="radio" name="filter" value="incomplete" <%=
+                    filter === 'incomplete' ? 'checked' : '' %> /> Incomplete
+                  </label>
+                </div>
+                <button type="submit">Filter</button>
+              </form>
+
+              <!-- Search Form -->
+              <form action="/" method="GET" class="search-form">
+                <!-- Preserve the current filter -->
+                <input type="hidden" name="filter" value="<%= filter %>" />
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="Search tasks..."
+                  value="<%= q %>"
+                />
+                <button type="submit">Search</button>
+              </form>
+            </div>
+
             <% if (tasks.length === 0) { %>
             <p>No tasks available.</p>
             <% } else { %>

@@ -1,4 +1,6 @@
-/* Import IBM Plex Mono */
+/* Filename: public/styles.css */
+
+/* Import Fonts */
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap");
 
@@ -15,7 +17,7 @@ body {
   background-color: #adadad;
 }
 
-/* Flex container to allow the footer to stick to the bottom */
+/* Container for the entire page (sticky footer) */
 .page-container {
   display: flex;
   flex-direction: column;
@@ -84,7 +86,7 @@ body {
   margin: 1rem 0;
 }
 
-/* ----------------------- Task Form Styling ----------------------- */
+/* ----------------------- Task Form ----------------------- */
 .task-form {
   display: flex;
   flex-direction: column;
@@ -97,7 +99,6 @@ body {
     background-color 0.3s ease;
 }
 
-/* Hover effect for task-form */
 .task-form:hover {
   transform: translate(-5px, -8px);
   box-shadow: 5px 5px 0px 0px #000080;
@@ -107,7 +108,6 @@ body {
   font-weight: 600;
 }
 
-/* Styling for input fields and textarea */
 .task-form input[type="text"],
 .task-form textarea {
   width: 100%;
@@ -119,8 +119,6 @@ body {
 }
 
 .task-form textarea {
-  min-width: 90%;
-  max-width: 100%;
   min-height: 50px;
   max-height: 175px;
 }
@@ -131,12 +129,57 @@ body {
   outline: none;
 }
 
-/* ----------------------- Search Form ----------------------- */
+/* ----------------------- Search & Filter Section ----------------------- */
+/* Container for separate filter & search forms */
+.search-filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Filter Form */
+.filter-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 13px;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.filter-form label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.filter-form input[type="radio"] {
+  margin: 0;
+}
+
+.filter-form button {
+  padding: 4px 8px;
+  border: 1px solid #c0c0c0;
+  background-color: #e0e0e0;
+  color: #000;
+  cursor: pointer;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.filter-form button:hover {
+  background-color: #d0d0d0;
+}
+
+/* Search Form */
 .search-form {
   display: flex;
-  justify-content: right; /* Center the search form */
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
 }
 
 .search-form input[type="text"] {
@@ -152,17 +195,37 @@ body {
   background-color: #e0e0e0;
   color: #000;
   cursor: pointer;
+  font-family: "IBM Plex Mono", monospace;
 }
 
 .search-form button:hover {
   background-color: #d0d0d0;
 }
 
-/* ----------------------- Task Section ----------------------- */
+/* ----------------------- Task List Section ----------------------- */
 .task-list-section {
   margin-top: 1.5rem;
 }
 
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: task-counter;
+}
+
+.task-list-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-list-section p {
+  padding-top: 2rem;
+  text-align: center;
+}
+
+/* ----------------------- Task Item ----------------------- */
 .task-details {
   min-width: 545px;
 }
@@ -174,18 +237,11 @@ body {
 
 .task-details p {
   margin: 10px 16px;
-  font-size: 15px;
-}
-
-/* Task List container with counter for numbering tasks */
-.task-list {
-  list-style: none;
   padding: 0;
-  margin: 0;
-  counter-reset: task-counter;
+  font-size: 15px;
+  text-align: left;
 }
 
-/* Individual Task Item Styling */
 .task-item {
   display: flex;
   justify-content: space-between;
@@ -200,24 +256,19 @@ body {
     background-color 0.3s ease;
 }
 
-/* Hover effect for task items */
 .task-item:hover {
   transform: translate(-5px, -8px);
   box-shadow: 5px 5px 0px 0px #000080;
+  background-color: #f0f0f0;
 }
 
-/* Display task number before each task item */
 .task-item::before {
   content: counter(task-counter) ".";
   font-weight: 500;
   margin-right: 10px;
 }
 
-.task-item:hover {
-  background-color: #f0f0f0;
-}
-
-/* Style for completed tasks */
+/* ----------------------- Completed Tasks ----------------------- */
 .task-item.completed .task-details {
   opacity: 0.6;
   filter: grayscale(70%);
@@ -225,13 +276,11 @@ body {
   color: #808080;
 }
 
-/* Action buttons remain unaffected */
 .task-item.completed .task-actions {
   opacity: 1;
   filter: none;
 }
 
-/* Disable the hover effect for completed tasks */
 .task-item.completed:hover {
   transform: none;
   box-shadow: none;
@@ -239,21 +288,17 @@ body {
 }
 
 /* ----------------------- Task Action Buttons ----------------------- */
-/* Container for aligning action buttons in a row */
 .task-actions {
   display: flex;
-  flex-direction: row;
   gap: 0.5rem;
 }
 
-/* Remove extra margins from forms within task-actions */
 .task-actions form {
   display: inline-block;
   margin: 0;
   padding: 0;
 }
 
-/* General button styles for forms and task actions */
 .task-form button,
 .task-actions button {
   padding: 4px 8px;
@@ -263,7 +308,6 @@ body {
   cursor: pointer;
 }
 
-/* Specific fixed width for complete and delete buttons */
 .complete-button,
 .delete-button {
   width: 80px;
@@ -274,7 +318,7 @@ body {
   background-color: #d0d0d0;
 }
 
-/* ----------------------- Footer Styling ----------------------- */
+/* ----------------------- Footer ----------------------- */
 .footer {
   flex-shrink: 0;
   text-align: center;
