@@ -6,11 +6,15 @@ const router = express.Router();
 let tasks = [];
 let nextId = 1;
 
-// GET / - Render the main page with the list of tasks and add task form
+/**
+ * GET /
+ * Renders the main page with tasks filtered by search query,
+ * task status, and sorted by priority if specified.
+ */
 router.get("/", (req, res) => {
   let filteredTasks = tasks;
 
-  // Filter by search query if provided (ignoring case)
+  // Filter by search query if provided (case-insensitive)
   if (req.query.q) {
     const q = req.query.q.toLowerCase();
     filteredTasks = filteredTasks.filter(
@@ -28,13 +32,44 @@ router.get("/", (req, res) => {
     filteredTasks = filteredTasks.filter((task) => !task.completed);
   }
 
-  // Pass the current search query and filter to the view
-  res.render("index", { tasks: filteredTasks, q: req.query.q || "", filter });
+  // Determine sort action based on button pressed
+  const action = req.query.action || "";
+  let sort = req.query.sort || "";
+  if (action === "clear") {
+    sort = ""; // Clear sort when the "Clear Sort" button is pressed
+  }
+
+  // Sort tasks based on priority if sort is specified,
+  // otherwise sort by task ID (default order)
+  const priorityMapping = { low: 1, medium: 2, high: 3 };
+  if (sort === "lowToHigh") {
+    filteredTasks.sort(
+      (a, b) => priorityMapping[a.priority] - priorityMapping[b.priority]
+    );
+  } else if (sort === "highToLow") {
+    filteredTasks.sort(
+      (a, b) => priorityMapping[b.priority] - priorityMapping[a.priority]
+    );
+  } else {
+    // Default sorting by task ID
+    filteredTasks.sort((a, b) => a.id - b.id);
+  }
+
+  // Render the index view with the filtered tasks and query parameters
+  res.render("index", {
+    tasks: filteredTasks,
+    q: req.query.q || "",
+    filter,
+    sort,
+  });
 });
 
-// POST /add-task - Add a new task
+/**
+ * POST /add-task
+ * Adds a new task with title, description, and priority.
+ */
 router.post("/add-task", (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, priority } = req.body;
   if (!title || title.trim() === "") {
     return res.status(400).send("Task title is required.");
   }
@@ -42,13 +77,17 @@ router.post("/add-task", (req, res) => {
     id: nextId++,
     title: title.trim(),
     description: description ? description.trim() : "",
+    priority: priority || "low", // Default priority is "low"
     completed: false,
   };
   tasks.push(task);
   res.redirect("/");
 });
 
-// POST /toggle-task/:id - Toggle the completion status of a task
+/**
+ * POST /toggle-task/:id
+ * Toggles the completion status of a task.
+ */
 router.post("/toggle-task/:id", (req, res) => {
   const taskId = parseInt(req.params.id);
   const task = tasks.find((t) => t.id === taskId);
@@ -59,7 +98,10 @@ router.post("/toggle-task/:id", (req, res) => {
   res.redirect("/");
 });
 
-// POST /delete-task/:id - Delete a task
+/**
+ * POST /delete-task/:id
+ * Deletes a task by its ID.
+ */
 router.post("/delete-task/:id", (req, res) => {
   const taskId = parseInt(req.params.id);
   const index = tasks.findIndex((t) => t.id === taskId);

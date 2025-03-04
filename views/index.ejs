@@ -9,14 +9,15 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <!-- Main Page Container -->
+    <!-- Main Page Container: Flex container for sticky footer -->
     <div class="page-container">
-      <!-- Application Window -->
+      <!-- Application Window (Windows98-style) -->
       <div class="app-window">
         <!-- Window Title Bar -->
         <div class="window-titlebar">
           <span class="window-title">Task Manager</span>
           <div class="window-controls">
+            <!-- Placeholder window control buttons -->
             <button class="window-btn minimize" title="Minimize">_</button>
             <button class="window-btn maximize" title="Maximize">☐</button>
             <button class="window-btn close" title="Close">X</button>
@@ -28,9 +29,25 @@
           <section class="task-section">
             <h2>Add New Task</h2>
             <form action="/add-task" method="POST" class="task-form">
+              <!-- Task Title -->
               <label for="title">Title:</label>
               <input type="text" name="title" id="title" required />
 
+              <!-- Priority Options -->
+              <label for="priority">Priority:</label>
+              <div class="priority-options">
+                <label>
+                  <input type="radio" name="priority" value="low" checked /> Low
+                </label>
+                <label>
+                  <input type="radio" name="priority" value="medium" /> Medium
+                </label>
+                <label>
+                  <input type="radio" name="priority" value="high" /> High
+                </label>
+              </div>
+
+              <!-- Task Description -->
               <label for="description">Description [optional]:</label>
               <textarea name="description" id="description"></textarea>
 
@@ -40,76 +57,95 @@
 
           <!-- Task List Section -->
           <section class="task-list-section">
+            <!-- Header for Task List -->
             <div class="task-list-header">
               <h2>Task List</h2>
             </div>
-            <!-- Search & Filter Forms -->
-            <div class="search-filter-container">
-              <!-- Filter Form -->
+
+            <!-- Row 1: Search Form (aligned to the right) -->
+            <form action="/" method="GET" class="search-form">
+              <input
+                type="text"
+                name="q"
+                placeholder="Search tasks..."
+                value="<%= q %>"
+              />
+              <button type="submit">Search</button>
+            </form>
+
+            <!-- Row 2: Filter & Sort Container -->
+            <div class="filter-sort-container">
+              <!-- Filter Form (Left Side) -->
               <form action="/" method="GET" class="filter-form">
-                <!-- Preserve the current search query -->
+                <!-- Preserve search query and sort value -->
                 <input type="hidden" name="q" value="<%= q %>" />
+                <input type="hidden" name="sort" value="<%= sort %>" />
                 <div class="filter-buttons">
                   <label>
-                    <input type="radio" name="filter" value="all" <%= filter ===
-                    'all' ? 'checked' : '' %> /> All
+                    <input type="radio" name="filter" value="all" <%= filter === 'all' ? 'checked' : '' %> /> All
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="completed" <%=
-                    filter === 'completed' ? 'checked' : '' %> /> Completed
+                    <input type="radio" name="filter" value="completed" <%= filter === 'completed' ? 'checked' : '' %> /> Completed
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="incomplete" <%=
-                    filter === 'incomplete' ? 'checked' : '' %> /> Incomplete
+                    <input type="radio" name="filter" value="incomplete" <%= filter === 'incomplete' ? 'checked' : '' %> /> Incomplete
                   </label>
                 </div>
-                <button type="submit">Filter</button>
+                <button type="submit">Apply Filter</button>
               </form>
 
-              <!-- Search Form -->
-              <form action="/" method="GET" class="search-form">
-                <!-- Preserve the current filter -->
+              <!-- Sort Form (Right Side) -->
+              <form action="/" method="GET" class="sort-form">
+                <!-- Preserve search query and filter value -->
+                <input type="hidden" name="q" value="<%= q %>" />
                 <input type="hidden" name="filter" value="<%= filter %>" />
-                <input
-                  type="text"
-                  name="q"
-                  placeholder="Search tasks..."
-                  value="<%= q %>"
-                />
-                <button type="submit">Search</button>
+                <select name="sort">
+                  <option value="">Select</option>
+                  <option value="lowToHigh" <%= sort === 'lowToHigh' ? 'selected' : '' %>>Low to High</option>
+                  <option value="highToLow" <%= sort === 'highToLow' ? 'selected' : '' %>>High to Low</option>
+                </select>
+                <!-- Two buttons for sorting action and for clearing sort -->
+                <button type="submit" name="action" value="sort">Sort</button>
+                <button type="submit" name="action" value="clear">Clear Sort</button>
               </form>
             </div>
 
+            <!-- Display Task List -->
             <% if (tasks.length === 0) { %>
-            <p>No tasks available.</p>
+              <p>No tasks available.</p>
             <% } else { %>
-            <ul class="task-list">
-              <% tasks.forEach(task => { %>
-              <li class="task-item <%= task.completed ? 'completed' : '' %>">
-                <div class="task-details">
-                  <strong><%= task.title %></strong>
-                  <% if (task.description) { %>
-                  <p><%= task.description %></p>
-                  <% } %>
-                </div>
-                <div class="task-actions">
-                  <form action="/toggle-task/<%= task.id %>" method="POST">
-                    <button type="submit" class="complete-button">
-                      <%= task.completed ? 'Reopen' : 'Complete' %>
-                    </button>
-                  </form>
-                  <form action="/delete-task/<%= task.id %>" method="POST">
-                    <button type="submit" class="delete-button">Delete</button>
-                  </form>
-                </div>
-              </li>
-              <% }); %>
-            </ul>
+              <ul class="task-list">
+                <% tasks.forEach(task => { %>
+                  <li class="task-item <%= task.completed ? 'completed' : '' %>">
+                    <div class="task-details">
+                      <!-- Display task title with priority indicator -->
+                      <strong>
+                        <%= task.title %> [<%= task.priority.charAt(0).toUpperCase() + task.priority.slice(1) %> Priority]
+                      </strong>
+                      <% if (task.description) { %>
+                        <p><%= task.description %></p>
+                      <% } %>
+                    </div>
+                    <div class="task-actions">
+                      <!-- Toggle Complete / Reopen -->
+                      <form action="/toggle-task/<%= task.id %>" method="POST">
+                        <button type="submit" class="complete-button">
+                          <%= task.completed ? 'Reopen' : 'Complete' %>
+                        </button>
+                      </form>
+                      <!-- Delete Task -->
+                      <form action="/delete-task/<%= task.id %>" method="POST">
+                        <button type="submit" class="delete-button">Delete</button>
+                      </form>
+                    </div>
+                  </li>
+                <% }); %>
+              </ul>
             <% } %>
           </section>
         </div>
       </div>
-      <!-- Footer -->
+      <!-- Footer Section -->
       <footer class="footer">
         <p>&copy; Jennessa Sierra | CMPS2212</p>
       </footer>
