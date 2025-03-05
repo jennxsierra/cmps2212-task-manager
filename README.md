@@ -73,18 +73,18 @@ This project is a Task Manager web application that demonstrates server-side ren
 
 ```markdown
 .
-├── app.js
+├── app.js # Main entry point for the application
 ├── LICENSE
 ├── package.json
 ├── package-lock.json
-├── public
-│   └── styles.css
+├── public # Static assets (images, stylesheets, scripts)
+│   └── styles.css # Custom CSS for styling the app
 ├── README.md
-├── routes
-│   └── tasks.js
-└── views
-├── error.ejs
-└── index.ejs
+├── routes # Route handlers for the application
+│   └── tasks.js # Task-related routes
+└── views # EJS templates for rendering the UI
+├── error.ejs # Error page
+└── index.ejs # Main page for the Task Manager app
 ```
 
 ## Usage
