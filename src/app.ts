@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import logger from "./middleware/logger";
+import { getLocalIpAddress } from "./utils/networkUtils";
 import taskRoutes from "./routes/taskRoutes";
 
 const app = express();
@@ -29,5 +30,9 @@ app.use((_req, res) => {
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
+  const ipAddress = getLocalIpAddress();
   console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(
+    `Access the server from another computer at http://${ipAddress}:${PORT}`
+  );
 });
