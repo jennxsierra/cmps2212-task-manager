@@ -1,8 +1,12 @@
 import express from "express";
 import path from "path";
+import logger from "./middleware/logger";
 import taskRoutes from "./routes/taskRoutes";
 
 const app = express();
+
+// Use the logger middleware
+app.use(logger);
 
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
@@ -13,12 +17,6 @@ app.use(express.static(path.join(process.cwd(), "public")));
 // Set EJS as the templating engine and set the views directory
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "src/views"));
-
-// Logging middleware to log request details
-app.use((_req, _res, next) => {
-  console.log(`[${new Date().toISOString()}] ${_req.method} ${_req.url}`);
-  next();
-});
 
 // Mount the task management routes
 app.use("/", taskRoutes);
