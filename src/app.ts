@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import logger from "./middleware/logger";
+import { methodOverrideMiddleware } from "./middleware/methodOverride";
 import { getLocalIpAddress } from "./utils/networkUtils";
 import taskRoutes from "./routes/taskRoutes";
 
@@ -8,6 +9,9 @@ const app = express();
 
 // Use the logger middleware
 app.use(logger);
+
+// Use the method override middleware
+app.use(methodOverrideMiddleware);
 
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));

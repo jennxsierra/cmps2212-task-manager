@@ -1,9 +1,9 @@
 import express from "express";
 import {
   getTasks,
-  addTask,
-  toggleTask,
-  deleteTask,
+  addTaskController,
+  toggleTaskController,
+  deleteTaskController,
 } from "../controllers/taskController";
 
 const router = express.Router();
@@ -12,12 +12,12 @@ const router = express.Router();
 router.get("/", getTasks);
 
 // POST /add-task -> Add a new task
-router.post("/add-task", addTask);
+router.post("/add-task", addTaskController);
 
-// POST /toggle-task/:id -> Toggle task completion
-router.post("/toggle-task/:id", toggleTask);
+// PATCH /tasks/:id -> Toggle task completion
+router.patch("/tasks/:id", toggleTaskController);
 
-// POST /delete-task/:id -> Delete a task
-router.post("/delete-task/:id", deleteTask);
+// DELETE /tasks/:id -> Delete a task
+router.delete("/tasks/:id", deleteTaskController);
 
 export default router;

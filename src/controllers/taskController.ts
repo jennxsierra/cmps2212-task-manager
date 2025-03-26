@@ -1,94 +1,101 @@
 import { Request, Response } from "express";
-import { tasks, getNextId, Task } from "../models/taskModel";
+import {
+  getAllTasks,
+  addTask,
+  toggleTaskCompletion,
+  deleteTask,
+} from "../models/taskModel";
 
-export const getTasks = (req: Request, res: Response): void => {
-  let filteredTasks = tasks;
+// Fetch all tasks
+export const getTasks = async (req: Request, res: Response): Promise<void> => {
+  const searchQuery = (req.query.q as string) || "";
+  const filter = (req.query.filter as string) || "all";
+  const sort = (req.query.sort as string) || "";
 
-  // Filter by search query if provided (case-insensitive)
-  if (req.query.q) {
-    const q = (req.query.q as string).toLowerCase();
-    filteredTasks = filteredTasks.filter(
-      (task) =>
-        task.title.toLowerCase().includes(q) ||
-        (task.description && task.description.toLowerCase().includes(q))
-    );
+  try {
+    const tasks = await getAllTasks(searchQuery.toLowerCase(), filter, sort);
+    res.render("index", {
+      tasks,
+      q: searchQuery,
+      filter,
+      sort,
+    });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).render("error", { message: "Failed to fetch tasks." });
   }
-
-  // Filter by task status if provided
-  const filter = req.query.filter || "all";
-  if (filter === "completed") {
-    filteredTasks = filteredTasks.filter((task) => task.completed);
-  } else if (filter === "incomplete") {
-    filteredTasks = filteredTasks.filter((task) => !task.completed);
-  }
-
-  // Determine sort action based on button pressed
-  const action = req.query.action || "";
-  let sort = req.query.sort || "";
-  if (action === "clear") {
-    sort = ""; // Clear sort when the "Clear Sort" button is pressed
-  }
-
-  // Sort tasks based on priority if sort is specified,
-  // otherwise sort by task ID (default order)
-  const priorityMapping = { low: 1, medium: 2, high: 3 };
-  if (sort === "lowToHigh") {
-    filteredTasks.sort(
-      (a, b) => priorityMapping[a.priority] - priorityMapping[b.priority]
-    );
-  } else if (sort === "highToLow") {
-    filteredTasks.sort(
-      (a, b) => priorityMapping[b.priority] - priorityMapping[a.priority]
-    );
-  } else {
-    // Default sorting by task ID
-    filteredTasks.sort((a, b) => a.id - b.id);
-  }
-
-  // Render the index view with the filtered tasks and query parameters
-  res.render("index", {
-    tasks: filteredTasks,
-    q: req.query.q || "",
-    filter,
-    sort,
-  });
 };
 
-export const addTask = (req: Request, res: Response): void => {
+// Add a new task
+export const addTaskController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { title, description, priority } = req.body;
-  if (!title || title.trim() === "") {
-    res.status(400).send("Task title is required.");
-    return;
+
+  // Validation
+  if (!title || title.trim().length < 3 || title.trim().length > 100) {
+    return res.status(400).render("index", {
+      tasks: await getAllTasks("", "all", ""),
+      q: "",
+      filter: "all",
+      sort: "",
+      errorMessage: "Title must be between 3 and 100 characters.",
+    });
   }
-  const task: Task = {
-    id: getNextId(),
-    title: title.trim(),
-    description: description ? description.trim() : "",
-    priority: priority || "low", // Default priority is "low"
-    completed: false,
-  };
-  tasks.push(task);
-  res.redirect("/");
+  if (description && description.length > 500) {
+    return res.status(400).render("index", {
+      tasks: await getAllTasks("", "all", ""),
+      q: "",
+      filter: "all",
+      sort: "",
+      errorMessage: "Description cannot exceed 500 characters.",
+    });
+  }
+
+  try {
+    await addTask(title.trim(), description?.trim() || "", priority || "low");
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error adding task:", error);
+    res.status(500).render("error", { message: "Failed to add task." });
+  }
 };
 
-export const toggleTask = (req: Request, res: Response): void => {
+// Toggle task completion
+export const toggleTaskController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const taskId = parseInt(req.params.id);
-  const task = tasks.find((t) => t.id === taskId);
-  if (!task) {
-    res.status(404).send("Task not found.");
-    return;
+
+  try {
+    const task = await toggleTaskCompletion(taskId);
+    if (!task) {
+      return res.status(404).render("error", { message: "Task not found." });
+    }
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error toggling task:", error);
+    res.status(500).render("error", { message: "Failed to toggle task." });
   }
-  task.completed = !task.completed;
-  res.redirect("/");
 };
 
-export const deleteTask = (req: Request, res: Response): void => {
+// Delete a task
+export const deleteTaskController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const taskId = parseInt(req.params.id);
-  const index = tasks.findIndex((t) => t.id === taskId);
-  if (index === -1) {
-    res.status(404).send("Task not found.");
-    return;
+
+  try {
+    const task = await deleteTask(taskId);
+    if (!task) {
+      return res.status(404).render("error", { message: "Task not found." });
+    }
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    res.status(500).render("error", { message: "Failed to delete task." });
   }
-  tasks.splice(index, 1);
-  res.redirect("/");
 };

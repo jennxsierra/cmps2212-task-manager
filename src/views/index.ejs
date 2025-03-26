@@ -128,13 +128,13 @@
                     </div>
                     <div class="task-actions">
                       <!-- Toggle Complete / Reopen -->
-                      <form action="/toggle-task/<%= task.id %>" method="POST">
+                      <form action="/tasks/<%= task.id %>?_method=PATCH" method="POST">
                         <button type="submit" class="complete-button">
                           <%= task.completed ? 'Reopen' : 'Complete' %>
                         </button>
                       </form>
                       <!-- Delete Task -->
-                      <form action="/delete-task/<%= task.id %>" method="POST">
+                      <form action="/tasks/<%= task.id %>?_method=DELETE" method="POST">
                         <button type="submit" class="delete-button">Delete</button>
                       </form>
                     </div>
