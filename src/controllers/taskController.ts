@@ -1,22 +1,12 @@
-// Filename: routes/tasks.js
-import express from "express";
-const router = express.Router();
+import { Request, Response } from "express";
+import { tasks, getNextId, Task } from "../models/taskModel";
 
-// In-memory array to store tasks and a counter for unique IDs
-let tasks = [];
-let nextId = 1;
-
-/**
- * GET /
- * Renders the main page with tasks filtered by search query,
- * task status, and sorted by priority if specified.
- */
-router.get("/", (req, res) => {
+export const getTasks = (req: Request, res: Response): void => {
   let filteredTasks = tasks;
 
   // Filter by search query if provided (case-insensitive)
   if (req.query.q) {
-    const q = req.query.q.toLowerCase();
+    const q = (req.query.q as string).toLowerCase();
     filteredTasks = filteredTasks.filter(
       (task) =>
         task.title.toLowerCase().includes(q) ||
@@ -62,19 +52,16 @@ router.get("/", (req, res) => {
     filter,
     sort,
   });
-});
+};
 
-/**
- * POST /add-task
- * Adds a new task with title, description, and priority.
- */
-router.post("/add-task", (req, res) => {
+export const addTask = (req: Request, res: Response): void => {
   const { title, description, priority } = req.body;
   if (!title || title.trim() === "") {
-    return res.status(400).send("Task title is required.");
+    res.status(400).send("Task title is required.");
+    return;
   }
-  const task = {
-    id: nextId++,
+  const task: Task = {
+    id: getNextId(),
     title: title.trim(),
     description: description ? description.trim() : "",
     priority: priority || "low", // Default priority is "low"
@@ -82,34 +69,26 @@ router.post("/add-task", (req, res) => {
   };
   tasks.push(task);
   res.redirect("/");
-});
+};
 
-/**
- * POST /toggle-task/:id
- * Toggles the completion status of a task.
- */
-router.post("/toggle-task/:id", (req, res) => {
+export const toggleTask = (req: Request, res: Response): void => {
   const taskId = parseInt(req.params.id);
   const task = tasks.find((t) => t.id === taskId);
   if (!task) {
-    return res.status(404).send("Task not found.");
+    res.status(404).send("Task not found.");
+    return;
   }
   task.completed = !task.completed;
   res.redirect("/");
-});
+};
 
-/**
- * POST /delete-task/:id
- * Deletes a task by its ID.
- */
-router.post("/delete-task/:id", (req, res) => {
+export const deleteTask = (req: Request, res: Response): void => {
   const taskId = parseInt(req.params.id);
   const index = tasks.findIndex((t) => t.id === taskId);
   if (index === -1) {
-    return res.status(404).send("Task not found.");
+    res.status(404).send("Task not found.");
+    return;
   }
   tasks.splice(index, 1);
   res.redirect("/");
-});
-
-export default router;
+};
