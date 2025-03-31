@@ -17,7 +17,21 @@ body {
   background-color: #adadad;
 }
 
-/* Container for the entire page */
+/* ----------------------- Header ----------------------- */
+.header {
+  display: flex;
+  justify-content: center; /* Centers the image horizontally */
+  align-items: center; /* Centers the image vertically */
+  height: 100px; /* Adjust height as needed */
+}
+
+.header-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Ensures the image scales properly */
+}
+
+/* ----------------------- Main Container ----------------------- */
 .page-container {
   display: flex;
   flex-direction: column;

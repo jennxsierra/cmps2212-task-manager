@@ -1,16 +1,7 @@
 <!-- Filename: views/index.ejs -->
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Metadata & Stylesheet -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Task Manager</title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body>
+<%- include('partials/header') %>
     <!-- Main Page Container: Flex container for sticky footer -->
-    <div class="page-container">
+    <main class="page-container">
       <!-- Application Window (Windows98-style) -->
       <div class="app-window">
         <!-- Window Title Bar -->
@@ -145,10 +136,6 @@
           </section>
         </div>
       </div>
-      <!-- Footer Section -->
-      <footer class="footer">
-        <p>&copy; Jennessa Sierra | CMPS2212</p>
-      </footer>
-    </div>
-  </body>
-</html>
+    </main>
+<!-- Footer Section -->
+<%- include('partials/footer') %>
