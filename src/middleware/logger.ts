@@ -19,6 +19,8 @@ morgan.token("methodColored", (req: Request) => {
       return chalk.green(method);
     case "POST":
       return chalk.blue(method);
+    case "PATCH":
+      return chalk.cyan(method);
     case "PUT":
       return chalk.yellow(method);
     case "DELETE":
@@ -49,7 +51,11 @@ const customFormat = [
 ].join(" ");
 
 const logger = morgan(customFormat, {
-  skip: (req: Request) => req.url.includes("styles.css"), // Skip logging for styles.css
+  skip: (req: Request) => {
+    // Skip logging for requests to static files with specific extensions
+    const skipExtensions = [".css", ".png", ".jpg", ".jpeg", ".gif", ".svg"];
+    return skipExtensions.some((ext) => req.url.endsWith(ext));
+  },
 });
 
 export default logger;
