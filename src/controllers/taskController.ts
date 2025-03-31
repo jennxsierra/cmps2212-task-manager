@@ -4,7 +4,7 @@ import {
   addTask,
   toggleTaskCompletion,
   deleteTask,
-} from "../models/taskModel";
+} from "../models/taskModel.js";
 
 // Fetch all tasks
 export const getTasks = async (req: Request, res: Response): Promise<void> => {

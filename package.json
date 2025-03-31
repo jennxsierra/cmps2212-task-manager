@@ -4,7 +4,7 @@
   "description": "A task management web application",
   "license": "ISC",
   "author": "Jennessa Sierra",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/app.js",
   "scripts": {
     "clean": "rm -rf dist",

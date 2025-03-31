@@ -1,4 +1,4 @@
-import { query } from "../config/dbConfig";
+import { query } from "../config/dbConfig.js";
 
 // Define the Task interface
 export interface Task {

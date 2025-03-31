@@ -1,9 +1,9 @@
 import express from "express";
 import path from "path";
-import logger from "./middleware/logger";
-import { methodOverrideMiddleware } from "./middleware/methodOverride";
-import { getLocalIpAddress } from "./utils/networkUtils";
-import taskRoutes from "./routes/taskRoutes";
+import logger from "./middleware/logger.js";
+import { methodOverrideMiddleware } from "./middleware/methodOverride.js";
+import { getLocalIpAddress } from "./utils/networkUtils.js";
+import taskRoutes from "./routes/taskRoutes.js";
 
 const app = express();
 
