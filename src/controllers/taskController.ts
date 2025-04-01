@@ -33,7 +33,7 @@ export const addTaskController = async (
 ): Promise<void> => {
   const { title, description, priority } = req.body;
 
-  // Validation
+  // Validation for title and description
   if (!title || title.trim().length < 3 || title.trim().length > 100) {
     return res.status(400).render("index", {
       tasks: await getAllTasks("", "all", ""),
@@ -43,6 +43,7 @@ export const addTaskController = async (
       errorMessage: "Title must be between 3 and 100 characters.",
     });
   }
+
   if (description && description.length > 500) {
     return res.status(400).render("index", {
       tasks: await getAllTasks("", "all", ""),

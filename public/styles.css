@@ -158,6 +158,16 @@ body {
   outline: none;
 }
 
+/* Error Message */
+.error-messages {
+  color: #f00;
+  background-color: #ffe6e6;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #f00;
+  border-radius: 4px;
+}
+
 /* ----------------------- Search, Filter & Sort Section ----------------------- */
 /* Search Form (Row 1: aligned to right) */
 .search-form {

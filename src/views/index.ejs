@@ -19,10 +19,15 @@
           <!-- Add New Task Section -->
           <section class="task-section">
             <h2>Add New Task</h2>
+            <% if (typeof errorMessage !== "undefined" && errorMessage) { %>
+              <div class="error-messages">
+                <p><%= errorMessage %></p>
+              </div>
+            <% } %>
             <form action="/add-task" method="POST" class="task-form">
               <!-- Task Title -->
               <label for="title">Title:</label>
-              <input type="text" name="title" id="title" required />
+              <input type="text" name="title" id="title" />
 
               <!-- Priority Options -->
               <label for="priority">Priority:</label>
