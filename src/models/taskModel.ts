@@ -10,6 +10,12 @@ export interface Task {
   created_at: Date;
 }
 
+// Fetch a task by ID
+export const getTaskById = async (id: number): Promise<Task | null> => {
+  const result = await query("SELECT * FROM tasks WHERE id = $1", [id]);
+  return result.rows[0] || null;
+};
+
 // Fetch all tasks with optional search, filter, and sort
 export const getAllTasks = async (
   searchQuery: string,
@@ -74,5 +80,33 @@ export const deleteTask = async (id: number): Promise<Task | null> => {
   const result = await query(`DELETE FROM tasks WHERE id = $1 RETURNING *`, [
     id,
   ]);
+  return result.rows[0] || null;
+};
+
+// Update a task
+export const updateTask = async (
+  id: number,
+  fields: Partial<Pick<Task, "title" | "description" | "priority">>
+): Promise<Task | null> => {
+  const updates = [];
+  const values: any[] = [];
+  let index = 1;
+
+  for (const [key, value] of Object.entries(fields)) {
+    updates.push(`${key} = $${index}`);
+    values.push(value);
+    index++;
+  }
+
+  if (updates.length === 0) {
+    throw new Error("No fields provided for update.");
+  }
+
+  const queryText = `UPDATE tasks SET ${updates.join(
+    ", "
+  )} WHERE id = $${index} RETURNING *`;
+  values.push(id);
+
+  const result = await query(queryText, values);
   return result.rows[0] || null;
 };

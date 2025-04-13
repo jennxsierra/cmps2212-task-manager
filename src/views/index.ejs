@@ -129,6 +129,10 @@
                           <%= task.completed ? 'Reopen' : 'Complete' %>
                         </button>
                       </form>
+                      <!-- Update Task -->
+                      <div>
+                        <button onclick="location.href='/tasks/<%= task.id %>/update'" class="update-button">Update</button>
+                      </div>
                       <!-- Delete Task -->
                       <form action="/tasks/<%= task.id %>?_method=DELETE" method="POST">
                         <button type="submit" class="delete-button">Delete</button>

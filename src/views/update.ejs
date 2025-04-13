@@ -1,0 +1,47 @@
+<!-- Filename: views/update.ejs -->
+<%- include('partials/header') %>
+<main class="page-container">
+  <div class="app-window">
+    <div class="window-titlebar">
+      <span class="window-title">Update Task</span>
+      <div class="window-controls">
+        <button class="window-btn minimize" title="Minimize">_</button>
+        <button class="window-btn maximize" title="Maximize">☐</button>
+        <button class="window-btn close" title="Close">X</button>
+      </div>
+    </div>
+    <div class="window-content">
+      <!-- Update Task Form -->
+      <section class="task-section">
+        <h2>Update Task</h2>
+        <form action="/tasks/<%= task.id %>?_method=PUT" method="POST" class="task-form">
+          <!-- Task Title -->
+          <label for="title">Title:</label>
+          <input type="text" name="title" id="title" value="<%= task.title %>" required />
+
+          <!-- Priority Options -->
+          <label for="priority">Priority:</label>
+          <div class="priority-options">
+            <label>
+              <input type="radio" name="priority" value="low" <%= task.priority === "low" ? "checked" : "" %> /> Low
+            </label>
+            <label>
+              <input type="radio" name="priority" value="medium" <%= task.priority === "medium" ? "checked" : "" %> /> Medium
+            </label>
+            <label>
+              <input type="radio" name="priority" value="high" <%= task.priority === "high" ? "checked" : "" %> /> High
+            </label>
+          </div>
+
+          <!-- Task Description -->
+          <label for="description">Description [optional]:</label>
+          <textarea name="description" id="description"><%= task.description %></textarea>
+
+          <button type="submit">Update Task</button>
+          <button onclick="location.href='/'">Cancel</button>
+        </form>
+      </section>
+    </div>
+  </div>
+</main>
+<%- include('partials/footer') %>

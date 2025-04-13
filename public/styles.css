@@ -359,6 +359,7 @@ body {
 /* ----------------------- Task Action Buttons ----------------------- */
 .task-actions {
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -378,6 +379,7 @@ body {
 }
 
 .complete-button,
+.update-button,
 .delete-button {
   width: 80px;
 }

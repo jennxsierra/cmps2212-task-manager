@@ -1,10 +1,34 @@
 import { Request, Response } from "express";
 import {
+  getTaskById,
   getAllTasks,
   addTask,
   toggleTaskCompletion,
   deleteTask,
+  updateTask,
 } from "../models/taskModel.js";
+
+// Render the update form for a specific task
+export const renderUpdateFormController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const taskId = parseInt(req.params.id);
+
+  try {
+    const task = await getTaskById(taskId);
+    if (!task) {
+      return res.status(404).render("error", { message: "Task not found." });
+    }
+
+    res.render("update", { task });
+  } catch (error) {
+    console.error("Error fetching task for update:", error);
+    res
+      .status(500)
+      .render("error", { message: "Failed to load task for editing." });
+  }
+};
 
 // Fetch all tasks
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
@@ -98,5 +122,31 @@ export const deleteTaskController = async (
   } catch (error) {
     console.error("Error deleting task:", error);
     res.status(500).render("error", { message: "Failed to delete task." });
+  }
+};
+
+// Update a task
+export const updateTaskController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const taskId = parseInt(req.params.id);
+  const { title, description, priority } = req.body;
+
+  try {
+    const updatedTask = await updateTask(taskId, {
+      ...(title && { title: title.trim() }),
+      ...(description && { description: description.trim() }),
+      ...(priority && { priority }),
+    });
+
+    if (!updatedTask) {
+      return res.status(404).render("error", { message: "Task not found." });
+    }
+
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).render("error", { message: "Failed to update task." });
   }
 };
