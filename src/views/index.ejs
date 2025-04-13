@@ -130,9 +130,13 @@
                         </button>
                       </form>
                       <!-- Update Task -->
-                      <div>
-                        <button onclick="location.href='/tasks/<%= task.id %>/update'" class="update-button">Update</button>
-                      </div>
+                      <button
+                        onclick="location.href='/tasks/<%= task.id %>/update'"
+                        class="update-button"
+                        <%= task.completed ? 'disabled' : '' %>
+                      >
+                        Update
+                      </button>
                       <!-- Delete Task -->
                       <form action="/tasks/<%= task.id %>?_method=DELETE" method="POST">
                         <button type="submit" class="delete-button">Delete</button>

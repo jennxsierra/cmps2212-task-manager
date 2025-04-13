@@ -296,7 +296,8 @@ body {
 
 /* ----------------------- Task Item ----------------------- */
 .task-details {
-  min-width: 545px;
+  min-width: 600px;
+  max-width: 600px;
 }
 
 .task-details strong {
@@ -387,6 +388,13 @@ body {
 .task-form button:hover,
 .task-actions button:hover {
   background-color: #d0d0d0;
+}
+
+.update-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  border: 1px solid #999;
 }
 
 /* ----------------------- Footer ----------------------- */

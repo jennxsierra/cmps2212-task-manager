@@ -40,11 +40,11 @@ export const getAllTasks = async (
 
   // Sort logic
   if (sort === "lowToHigh") {
-    baseQuery += ` ORDER BY CASE priority WHEN 'low' THEN 1 WHEN 'medium' THEN 2 WHEN 'high' THEN 3 END ASC, id ASC`;
+    baseQuery += ` ORDER BY completed ASC, CASE priority WHEN 'low' THEN 1 WHEN 'medium' THEN 2 WHEN 'high' THEN 3 END ASC, id ASC`;
   } else if (sort === "highToLow") {
-    baseQuery += ` ORDER BY CASE priority WHEN 'high' THEN 3 WHEN 'medium' THEN 2 WHEN 'low' THEN 1 END DESC, id ASC`;
+    baseQuery += ` ORDER BY completed ASC, CASE priority WHEN 'high' THEN 3 WHEN 'medium' THEN 2 WHEN 'low' THEN 1 END DESC, id ASC`;
   } else {
-    baseQuery += ` ORDER BY id ASC`;
+    baseQuery += ` ORDER BY completed ASC, id ASC`;
   }
 
   const result = await query(baseQuery, values);
