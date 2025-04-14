@@ -24,6 +24,8 @@ export const getAllTasks = async (
   limit: number,
   offset: number
 ): Promise<{ tasks: Task[]; total: number }> => {
+  // Base query using WHERE to filter tasks
+  // 1=1 is a placeholder to simplify appending additional conditions
   let baseQuery = `SELECT * FROM tasks WHERE 1=1`;
   const values: any[] = [];
 

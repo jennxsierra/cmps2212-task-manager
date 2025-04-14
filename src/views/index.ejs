@@ -19,34 +19,64 @@
           <!-- Add New Task Section -->
           <section class="task-section">
             <h2>Add New Task</h2>
-            <% if (typeof errorMessage !== "undefined" && errorMessage) { %>
-              <div class="error-messages">
-                <p><%= errorMessage %></p>
-              </div>
-            <% } %>
-            <form action="/add-task" method="POST" class="task-form">
+            <form action="/add-task" method="POST" class="task-form" id="taskForm" novalidate>
               <!-- Task Title -->
               <label for="title">Title:</label>
-              <input type="text" name="title" id="title" />
-
+              <input
+                type="text"
+                name="title"
+                id="title"
+                value="<%= typeof title !== 'undefined' ? title : '' %>"
+                required
+                class="<%= errors && errors.title ? 'input-error' : '' %>"
+              />
+              <% if (errors && errors.title) { %>
+                <div class="error-message"><%= errors.title %></div>
+              <% } %>
+            
               <!-- Priority Options -->
               <label for="priority">Priority:</label>
               <div class="priority-options">
                 <label>
-                  <input type="radio" name="priority" value="low" checked /> Low
+                  <input
+                    type="radio"
+                    name="priority"
+                    value="low"
+                    <%= priority === "low" || !priority ? "checked" : "" %>
+                  />
+                  Low
                 </label>
                 <label>
-                  <input type="radio" name="priority" value="medium" /> Medium
+                  <input
+                    type="radio"
+                    name="priority"
+                    value="medium"
+                    <%= priority === "medium" ? "checked" : "" %>
+                  />
+                  Medium
                 </label>
                 <label>
-                  <input type="radio" name="priority" value="high" /> High
+                  <input
+                    type="radio"
+                    name="priority"
+                    value="high"
+                    <%= priority === "high" ? "checked" : "" %>
+                  />
+                  High
                 </label>
               </div>
-
+            
               <!-- Task Description -->
               <label for="description">Description [optional]:</label>
-              <textarea name="description" id="description"></textarea>
-
+              <textarea
+                name="description"
+                id="description"
+                class="<%= errors && errors.description ? 'input-error' : '' %>"
+              ><%= typeof description !== 'undefined' ? description : '' %></textarea>
+              <% if (errors && errors.description) { %>
+                <div class="error-message"><%= errors.description %></div>
+              <% } %>
+            
               <button type="submit">Add Task</button>
             </form>
           </section>

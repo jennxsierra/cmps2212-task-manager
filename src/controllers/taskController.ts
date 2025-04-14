@@ -41,6 +41,8 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
       sort,
       page,
       totalPages,
+      priority: "low",
+      errors: {}, // Pass an empty errors object
     });
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -55,24 +57,31 @@ export const addTaskController = async (
 ): Promise<void> => {
   const { title, description, priority } = req.body;
 
-  // Validation for title and description
+  const errors: { title?: string; description?: string } = {};
+
+  // Validation for title
   if (!title || title.trim().length < 3 || title.trim().length > 100) {
-    return res.status(400).render("index", {
-      tasks: await getAllTasks("", "all", "", 5, 0), // Add limit and offset
-      q: "",
-      filter: "all",
-      sort: "",
-      errorMessage: "Title must be between 3 and 100 characters.",
-    });
+    errors.title = "Title must be between 3 and 100 characters.";
   }
 
+  // Validation for description
   if (description && description.length > 500) {
+    errors.description = "Description cannot exceed 500 characters.";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    const { tasks, total } = await getAllTasks("", "all", "", 5, 0); // Fetch tasks
     return res.status(400).render("index", {
-      tasks: await getAllTasks("", "all", "", 5, 0), // Add limit and offset
+      tasks,
       q: "",
       filter: "all",
       sort: "",
-      errorMessage: "Description cannot exceed 500 characters.",
+      page: 1,
+      totalPages: Math.ceil(total / 5),
+      errors,
+      title, // Retain the submitted title
+      description, // Retain the submitted description
+      priority, // Retain the selected priority
     });
   }
 

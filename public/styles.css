@@ -158,14 +158,16 @@ body {
   outline: none;
 }
 
-/* Error Message */
-.error-messages {
-  color: #f00;
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.task-form input.input-error,
+.task-form textarea.input-error {
+  border: 2px solid red !important;
   background-color: #ffe6e6;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #f00;
-  border-radius: 4px;
 }
 
 /* ----------------------- Search, Filter & Sort Section ----------------------- */
