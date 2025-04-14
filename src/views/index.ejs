@@ -111,16 +111,26 @@
               <p>No tasks available.</p>
             <% } else { %>
               <ul class="task-list">
-                <% tasks.forEach(task => { %>
+                <% const startNumber = (page - 1) * 5; %>
+                <% tasks.forEach((task, index) => { %>
                   <li class="task-item <%= task.completed ? 'completed' : '' %>">
+                    <!-- Display task number -->
+                    <div class="task-number">
+                      <%= startNumber + index + 1 %>.
+                    </div>
                     <div class="task-details">
                       <!-- Display task title with priority indicator -->
-                      <strong>
-                        <%= task.title %> [<%= task.priority.charAt(0).toUpperCase() + task.priority.slice(1) %> Priority]
-                      </strong>
-                      <% if (task.description) { %>
-                        <p><%= task.description %></p>
-                      <% } %>
+                      <div class="task-title">
+                        <%= task.title %>
+                      </div>
+                      <div class="priority-<%= task.priority %>">
+                        <%= task.priority.toUpperCase() %>
+                      </div>
+                      <div class="task-description">
+                        <% if (task.description) { %>
+                          <p><%= task.description %></p>
+                        <% } %>
+                      </div>
                     </div>
                     <div class="task-actions">
                       <!-- Toggle Complete / Reopen -->

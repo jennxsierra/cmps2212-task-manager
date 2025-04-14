@@ -276,7 +276,6 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  counter-reset: task-counter;
 }
 
 .task-list-header {
@@ -289,24 +288,25 @@ body {
   margin-bottom: 0.25rem;
 }
 
-.task-list-section p {
-  padding-top: 2rem;
-  text-align: center;
+/* ----------------------- Task Item ----------------------- */
+.task-number {
+  font-weight: 600;
 }
 
-/* ----------------------- Task Item ----------------------- */
 .task-details {
+  display: flex;
+  flex-direction: column;
   min-width: 600px;
   max-width: 600px;
 }
 
-.task-details strong {
+.task-title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
-.task-details p {
-  margin: 10px 16px;
+.task-description {
   padding: 0;
   font-size: 15px;
   text-align: left;
@@ -321,7 +321,6 @@ body {
   border: 1px solid #c0c0c0;
   padding: 10px;
   margin-bottom: 4px;
-  counter-increment: task-counter;
   transition: transform 0.3s ease, box-shadow 0.3s ease,
     background-color 0.3s ease;
 }
@@ -332,14 +331,37 @@ body {
   background-color: #f0f0f0;
 }
 
-.task-item::before {
-  content: counter(task-counter) ".";
+/* ----------------------- Priority Colors ----------------------- */
+.priority-low,
+.priority-medium,
+.priority-high {
+  display: inline-block;
+  width: 70px;
+  padding: 4px 8px;
+  font-size: 14px;
   font-weight: 500;
-  margin-right: 10px;
+  text-align: center;
+  border: 1px solid #838383;
+  background-color: #e0e0e0;
+  color: #000;
+  cursor: default;
+}
+
+.priority-low {
+  background-color: #90ee90;
+}
+
+.priority-medium {
+  background-color: #ffa500;
+}
+
+.priority-high {
+  background-color: #ff6347;
 }
 
 /* ----------------------- Completed Tasks ----------------------- */
-.task-item.completed .task-details {
+.task-item.completed .task-details,
+.task-item.completed .task-number {
   opacity: 0.6;
   filter: grayscale(70%);
   text-decoration: line-through;
