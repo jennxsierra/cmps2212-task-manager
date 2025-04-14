@@ -20,14 +20,18 @@ export const getTaskById = async (id: number): Promise<Task | null> => {
 export const getAllTasks = async (
   searchQuery: string,
   filter: string,
-  sort: string
-): Promise<Task[]> => {
+  sort: string,
+  limit: number,
+  offset: number
+): Promise<{ tasks: Task[]; total: number }> => {
   let baseQuery = `SELECT * FROM tasks WHERE 1=1`;
   const values: any[] = [];
 
   // Search filter
   if (searchQuery) {
-    baseQuery += ` AND (LOWER(title) ILIKE $1 OR LOWER(description) ILIKE $1)`;
+    baseQuery += ` AND (LOWER(title) ILIKE $${
+      values.length + 1
+    } OR LOWER(description) ILIKE $${values.length + 1})`;
     values.push(`%${searchQuery}%`);
   }
 
@@ -47,8 +51,24 @@ export const getAllTasks = async (
     baseQuery += ` ORDER BY completed ASC, id ASC`;
   }
 
-  const result = await query(baseQuery, values);
-  return result.rows;
+  // Add LIMIT and OFFSET
+  const paginatedQuery = `${baseQuery} LIMIT $${values.length + 1} OFFSET $${
+    values.length + 2
+  }`;
+  values.push(limit, offset);
+
+  const tasksResult = await query(paginatedQuery, values);
+
+  // Get total count of tasks (without LIMIT and OFFSET)
+  const countResult = await query(
+    `SELECT COUNT(*) FROM (${baseQuery}) AS total`,
+    values.slice(0, -2)
+  );
+
+  return {
+    tasks: tasksResult.rows,
+    total: parseInt(countResult.rows[0].count, 10),
+  };
 };
 
 // Add a new task

@@ -8,41 +8,32 @@ import {
   updateTask,
 } from "../models/taskModel.js";
 
-// Render the update form for a specific task
-export const renderUpdateFormController = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const taskId = parseInt(req.params.id);
-
-  try {
-    const task = await getTaskById(taskId);
-    if (!task) {
-      return res.status(404).render("error", { message: "Task not found." });
-    }
-
-    res.render("update", { task });
-  } catch (error) {
-    console.error("Error fetching task for update:", error);
-    res
-      .status(500)
-      .render("error", { message: "Failed to load task for editing." });
-  }
-};
-
 // Fetch all tasks
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
   const searchQuery = (req.query.q as string) || "";
   const filter = (req.query.filter as string) || "all";
   const sort = (req.query.sort as string) || "";
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = 5; // Number of tasks per page
+  const offset = (page - 1) * limit;
 
   try {
-    const tasks = await getAllTasks(searchQuery.toLowerCase(), filter, sort);
+    const { tasks, total } = await getAllTasks(
+      searchQuery.toLowerCase(),
+      filter,
+      sort,
+      limit,
+      offset
+    );
+    const totalPages = Math.ceil(total / limit);
+
     res.render("index", {
       tasks,
       q: searchQuery,
       filter,
       sort,
+      page,
+      totalPages,
     });
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -60,7 +51,7 @@ export const addTaskController = async (
   // Validation for title and description
   if (!title || title.trim().length < 3 || title.trim().length > 100) {
     return res.status(400).render("index", {
-      tasks: await getAllTasks("", "all", ""),
+      tasks: await getAllTasks("", "all", "", 5, 0), // Add limit and offset
       q: "",
       filter: "all",
       sort: "",
@@ -70,7 +61,7 @@ export const addTaskController = async (
 
   if (description && description.length > 500) {
     return res.status(400).render("index", {
-      tasks: await getAllTasks("", "all", ""),
+      tasks: await getAllTasks("", "all", "", 5, 0), // Add limit and offset
       q: "",
       filter: "all",
       sort: "",
@@ -122,6 +113,28 @@ export const deleteTaskController = async (
   } catch (error) {
     console.error("Error deleting task:", error);
     res.status(500).render("error", { message: "Failed to delete task." });
+  }
+};
+
+// Render the update form for a specific task
+export const renderUpdateFormController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const taskId = parseInt(req.params.id);
+
+  try {
+    const task = await getTaskById(taskId);
+    if (!task) {
+      return res.status(404).render("error", { message: "Task not found." });
+    }
+
+    res.render("update", { task });
+  } catch (error) {
+    console.error("Error fetching task for update:", error);
+    res
+      .status(500)
+      .render("error", { message: "Failed to load task for editing." });
   }
 };
 

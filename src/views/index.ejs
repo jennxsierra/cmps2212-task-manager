@@ -146,6 +146,27 @@
                 <% }); %>
               </ul>
             <% } %>
+            <div class="pagination">
+              <form action="/" method="GET">
+                <input type="hidden" name="q" value="<%= q %>" />
+                <input type="hidden" name="filter" value="<%= filter %>" />
+                <input type="hidden" name="sort" value="<%= sort %>" />
+                <input type="hidden" name="page" value="<%= page - 1 %>" />
+                <button type="submit" class="pagination-btn <%= page === 1 ? 'disabled' : '' %>" <%= page === 1 ? 'disabled' : '' %>>
+                  &#129136;
+                </button>
+              </form>
+              <span>Page <%= page %> of <%= totalPages %></span>
+              <form action="/" method="GET">
+                <input type="hidden" name="q" value="<%= q %>" />
+                <input type="hidden" name="filter" value="<%= filter %>" />
+                <input type="hidden" name="sort" value="<%= sort %>" />
+                <input type="hidden" name="page" value="<%= page + 1 %>" />
+                <button type="submit" class="pagination-btn <%= page === totalPages ? 'disabled' : '' %>" <%= page === totalPages ? 'disabled' : '' %>>
+                  &#129138;
+                </button>
+              </form>
+            </div>
           </section>
         </div>
       </div>

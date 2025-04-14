@@ -397,6 +397,42 @@ body {
   border: 1px solid #999;
 }
 
+/* ----------------------- Pagination ----------------------- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: 14px;
+}
+
+.pagination span {
+  font-weight: 500;
+}
+
+.pagination-btn {
+  color: #000080;
+  padding: 4px 8px;
+  border: 1px solid #c0c0c0;
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+.pagination-btn:hover {
+  background-color: #d0d0d0;
+  color: #000;
+}
+
+.pagination-btn.disabled {
+  color: #808080;
+  background-color: #f0f0f0;
+  border-color: #d0d0d0;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ----------------------- Footer ----------------------- */
 .footer {
   flex-shrink: 0;
