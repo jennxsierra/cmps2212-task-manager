@@ -4,7 +4,7 @@
 
 # Task Manager App
 
-This project is a Task Manager web application that demonstrates server-side rendering using Node.js, Express, and EJS, along with custom CSS styling that mimics a retro Windows98 aesthetic. Watch [this demo video on YouTube](https://youtu.be/5CqyP1htr5g) to see the app in action.
+This project is a Task Manager web application that demonstrates server-side rendering using Node.js, Express, and EJS, along with custom CSS styling that mimics a retro Windows98 aesthetic. Watch [this demo video on YouTube](https://youtu.be/k_pO_ui_OaA) to see the app in action.
 
 ## Table of Contents
 
