@@ -165,7 +165,7 @@ export const updateTaskController = async (
   try {
     const updatedTask = await updateTask(taskId, {
       ...(title && { title: title.trim() }),
-      ...(description && { description: description.trim() }),
+      description: description !== undefined ? description.trim() : null, // Handle empty description
       ...(priority && { priority }),
     });
 
