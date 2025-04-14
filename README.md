@@ -93,9 +93,9 @@ This project is a Task Manager web application that demonstrates server-side ren
    task_manager_db=# CREATE ROLE task_manager_user WITH LOGIN PASSWORD 'your_password';
    ```
 
-   > [!IMPORTANT]
-   >
-   > Replace `your_password` with a secure password of your choice.
+> [!IMPORTANT]
+>
+> Replace `your_password` with a secure password of your choice.
 
 5. **Grant Permissions to the User**
 
@@ -165,13 +165,13 @@ Replace `your_password` with the password you set for the `task_manager_user` ro
 
    Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
 
-   >[!NOTE]
-   >
-   > Alternatively, if you want to run the app in development mode with live reloading:
-   >
-   > ```bash
-   > npm run dev
-   > ```
+>[!TIP]
+>
+> Alternatively, if you want to run the app in development mode with live reloading:
+>
+> ```bash
+> npm run dev
+> ```
 
 ## Project Structure
 
