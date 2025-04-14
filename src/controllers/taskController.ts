@@ -12,11 +12,18 @@ import {
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
   const searchQuery = (req.query.q as string) || "";
   const filter = (req.query.filter as string) || "all";
-  const sort = (req.query.sort as string) || "";
+  let sort = (req.query.sort as string) || "";
+  const action = req.query.action as string;
   const page = parseInt(req.query.page as string) || 1;
   const limit = 5; // Number of tasks per page
   const offset = (page - 1) * limit;
 
+  // Reset sort if action is "clear"
+  if (action === "clear") {
+    sort = "";
+  }
+
+  // Validate sort parameter
   try {
     const { tasks, total } = await getAllTasks(
       searchQuery.toLowerCase(),
