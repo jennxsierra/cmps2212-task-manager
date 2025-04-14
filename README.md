@@ -10,6 +10,9 @@ This project is a Task Manager web application that demonstrates server-side ren
 
 - [Features](#features)
 - [Installation](#installation)
+- [Database Setup](#database-setup)
+- [Environment Variables](#environment-variables)
+- [Running the App](#running-the-app)
 - [Project Structure](#project-structure)
 - [Usage](#usage)
   - [Adding Tasks](#1-adding-tasks)
@@ -34,61 +37,180 @@ This project is a Task Manager web application that demonstrates server-side ren
 ## Installation
 
 > [!NOTE]
+>
 > You will need to have [Node.js](https://nodejs.org/en/) (version 14 or later is recommended) and [npm](https://www.npmjs.com/) (comes with Node.js) installed on your machine.
 
 ### Steps
 
 1. **Clone the Repository**
 
-   ```markdown
-   bash
+   ```bash
    git clone https://github.com/yourusername/task-manager-app.git
    cd task-manager-app
    ```
 
 2. **Install Dependencies**
 
-   ```markdown
-   bash
+   ```bash
    npm install
    ```
 
-3. **Run the Application**
+## Database Setup
 
-   Start the app using one of these commands:
+> [!NOTE]
+>
+> You will need to have the latest version of [PostgreSQL](https://www.postgresql.org/download/) installed on your machine.
 
-   ```markdown
-   bash
+1. **Login as Administrator**
+
+   For Linux users:
+
+   ```bash
+   sudo -u postgres psql
+   ```
+
+   For macOS users:
+
+   ```bash
+   psql -U postgres
+   ```
+
+2. **Create a New Database**
+
+   ```sql
+   postgres=# CREATE DATABASE task_manager_db;
+   ```
+
+3. **Login to the Database**
+
+   ```sql
+   postgres=# \c task_manager_db
+   ```
+
+4. **Create a Role (User) to Access the Database**
+
+   ```sql
+   task_manager_db=# CREATE ROLE task_manager_user WITH LOGIN PASSWORD 'your_password';
+   ```
+
+   > [!IMPORTANT]
+   >
+   > Replace `your_password` with a secure password of your choice.
+
+5. **Grant Permissions to the User**
+
+    ```sql
+    postgres=# ALTER DATABASE task_manager_db OWNER TO task_manager_user;
+    postgres=# GRANT CREATE ON DATABASE task_manager_db TO task_manager_user;
+    ```
+
+6. **Run the Schema to Create the Table**
+
+   Use the provided schema file to create the `tasks` table:
+
+   ```bash
+   psql -d task_manager_db -f src/db/schema.sql
+   ```
+
+   Alternatively, you can manually create the table by running the following SQL command:
+
+   ```sql
+   task_manager_db=# CREATE TABLE IF NOT EXISTS tasks (
+       id SERIAL PRIMARY KEY,
+       title VARCHAR(100) NOT NULL,
+       description TEXT,
+       priority VARCHAR(10) DEFAULT 'low',
+       completed BOOLEAN DEFAULT FALSE,
+       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+   );
+   ```
+
+7. **Verify the Table**
+
+   Check that the `tasks` table was created:
+
+   ```sql
+   task_manager_db=# \dt
+   ```
+
+## Environment Variables
+
+Create a `.env` file in the root directory with the following content:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=task_manager_user
+DB_PASSWORD=your_password
+DB_DATABASE=task_manager_db
+```
+
+Replace `your_password` with the password you set for the `task_manager_user` role.
+
+## Running the App
+
+1. **Build the Project**
+
+   ```bash
+   npm run build
+   ```
+
+2. **Start the Server**
+
+   ```bash
    npm start
    ```
 
-   or
+3. **Access the App**
 
-   ```markdown
-   bash
-   node app.js
-   ```
+   Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
 
-4. **Access the App**
-
-   Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+   >[!NOTE]
+   >
+   > Alternatively, if you want to run the app in development mode with live reloading:
+   >
+   > ```bash
+   > npm run dev
+   > ```
 
 ## Project Structure
 
 ```markdown
 .
-├── app.js             # Main entry point for the application
 ├── LICENSE
-├── package.json
+├── .env                         # Create this file for environment variables
+├── .gitignore
+├── package.json                 # Project metadata and dependencies
 ├── package-lock.json
-├── public             # Static assets (images, stylesheets, scripts)
-│   └── styles.css     # Custom CSS for styling the app
+├── public                       # Static files served to the client
+│   └── styles.css
 ├── README.md
-├── routes             # Route handlers for the application
-│   └── tasks.js       # Task-related routes
-└── views              # EJS templates for rendering the UI
-├── error.ejs          # Error page
-└── index.ejs          # Main page for the Task Manager app
+├── src                          # Source code for the application
+│   ├── app.ts                   # Main application file
+│   ├── config                   # Configuration files
+│   │   └── dbConfig.ts          
+│   ├── controllers              # Logic for handling requests
+│   │   └── taskController.ts
+│   ├── db                       # Database connection and schema
+│   │   └── schema.sql
+│   ├── middleware               # Middleware functions
+│   │   ├── logger.ts
+│   │   └── methodOverride.ts
+│   ├── models                   # Data models and interfaces
+│   │   └── taskModel.ts
+│   ├── routes                   # Routes for handling requests
+│   │   └── taskRoutes.ts
+│   ├── utils                    # Utility functions
+│   │   ├── dateUtils.ts
+│   │   └── networkUtils.ts
+│   └── views                    # EJS templates for rendering views
+│       ├── error.ejs
+│       ├── index.ejs
+│       ├── partials             # Reusable components
+│       │   ├── footer.ejs
+│       │   └── header.ejs
+│       └── update.ejs
+└── tsconfig.json                # TypeScript configuration file
 ```
 
 ## Usage
@@ -130,6 +252,7 @@ This project is a Task Manager web application that demonstrates server-side ren
 - Click `Clear Sort` to remove the sorting and revert to the default order (sorted by task ID).
 
 > [!TIP]
+>
 > You can combine search, filter, and sort functionalities in a single request:
 >
 > - Enter a keyword in the search bar.
