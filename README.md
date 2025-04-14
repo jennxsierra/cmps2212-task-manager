@@ -90,12 +90,8 @@ This project is a Task Manager web application that demonstrates server-side ren
 4. **Create a Role (User) to Access the Database**
 
    ```sql
-   task_manager_db=# CREATE ROLE task_manager_user WITH LOGIN PASSWORD 'your_password';
+   task_manager_db=# CREATE ROLE task_manager_user WITH LOGIN PASSWORD '#password#';
    ```
-
-> [!IMPORTANT]
->
-> Replace `your_password` with a secure password of your choice.
 
 5. **Grant Permissions to the User**
 
@@ -133,19 +129,23 @@ This project is a Task Manager web application that demonstrates server-side ren
    task_manager_db=# \dt
    ```
 
+> [!WARNING]
+>
+> The database setup creates a user with the name `task_manager_user` and password `#password#`. These credentials will be used in the `.env` file to connect to the database. You can change the username and password as needed, but make sure to update the `.env` file accordingly.
+
 ## Environment Variables
 
-Create a `.env` file in the root directory with the following content:
+This project uses environment variables to configure the database connection. A `.env.example` file is provided as a template for your environment variables.
 
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=task_manager_user
-DB_PASSWORD=your_password
-DB_DATABASE=task_manager_db
-```
+Copy the `.env.example` file to create a `.env` file:
 
-Replace `your_password` with the password you set for the `task_manager_user` role.
+   ```bash
+   cp .env.example .env
+   ```
+
+> [!WARNING]
+>
+> The provided `.env` file should be used for development purposes only. For production, consider using more secure credentials in your `.env` file.
 
 ## Running the App
 
